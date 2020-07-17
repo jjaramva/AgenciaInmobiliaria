@@ -41,7 +41,7 @@ public class AgenciaPropiedadRestController {
 			}).orElseThrow(() -> new ResourceNotFoundException("Error con usuario"));
 			agenciaPropiedadRepository.save(agenciaPropiedad);
 			response.put(Constantes.CODIGO_HTTP, "200");
-			response.put(Constantes.MENSAJE_EXITO, "Registrado insertado exitosamente");
+			response.put(Constantes.MENSAJE_EXITO, "Registro insertado exitosamente");
 			return response;
 		} catch (ParseException e) {
 			response.put(Constantes.CODIGO_HTTP, "500");
