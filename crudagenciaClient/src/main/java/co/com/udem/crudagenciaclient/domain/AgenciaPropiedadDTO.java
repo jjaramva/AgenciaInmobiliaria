@@ -1,4 +1,4 @@
-package co.com.udem.crudagencia.dto;
+package co.com.udem.crudagenciaclient.domain;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import lombok.AllArgsConstructor;
