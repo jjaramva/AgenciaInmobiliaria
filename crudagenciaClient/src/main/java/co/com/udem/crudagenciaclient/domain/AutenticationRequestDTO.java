@@ -13,7 +13,6 @@ public class AutenticationRequestDTO {
 
 	public AutenticationRequestDTO() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public String getUsername() {
