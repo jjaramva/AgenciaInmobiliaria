@@ -1,4 +1,4 @@
-package co.com.udem.crudagencia.dto;
+package co.com.udem.crudagenciaclient.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

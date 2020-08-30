@@ -1,19 +1,22 @@
 package co.com.udem.crudagencia.entities;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 @Entity
 public class AgenciaPropiedad {
 
@@ -26,7 +29,8 @@ public class AgenciaPropiedad {
 	private String estadoPropiedad;
 	private Double valor;
 
-	@OneToOne(cascade = CascadeType.ALL)
+	@JsonBackReference
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "us_id", referencedColumnName = "id")
 	private AgenciaUsuario agenciaUsuario;
 

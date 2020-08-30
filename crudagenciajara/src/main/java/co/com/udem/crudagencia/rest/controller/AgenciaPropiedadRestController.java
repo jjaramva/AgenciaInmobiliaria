@@ -1,9 +1,12 @@
 package co.com.udem.crudagencia.rest.controller;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,14 +31,14 @@ public class AgenciaPropiedadRestController {
 	@Autowired
 	private AgenciaUsuarioRepository agenciaUsuarioRepository;
 
-	@PostMapping("/propiedades/addPropiedad/{id}")
-	public Map<String, String> addpropiedad(@PathVariable(value = "id") Long id,
+	@PostMapping("/propiedades/addPropiedad/{username}")
+	public Map<String, String> addpropiedad(@PathVariable(value = "username") String username,
 			@RequestBody AgenciaPropiedadDTO agenciaPropiedadDTO) throws ResourceNotFoundException {
 		Map<String, String> response = new HashMap<>();
 
 		try {
 			AgenciaPropiedad agenciaPropiedad = convertAgenciaPropiedad.convertToEntity(agenciaPropiedadDTO);
-			agenciaUsuarioRepository.findById(id).map(usuario -> {
+			agenciaUsuarioRepository.findBynumeroIdentificacion(Integer.parseInt(username)).map(usuario -> {
 				agenciaPropiedad.setAgenciaUsuario(usuario);
 				return agenciaPropiedad;
 			}).orElseThrow(() -> new ResourceNotFoundException("Error con usuario"));
@@ -49,6 +52,47 @@ public class AgenciaPropiedadRestController {
 			return response;
 		}
 
+	}
+
+	@GetMapping("/propiedades/numeroh/{numeroHabitaciones}")
+	public Iterable<AgenciaPropiedad> getNumHabitaciones(@PathVariable int numeroHabitaciones) {
+		return agenciaPropiedadRepository.findBynumeroHabitaciones(numeroHabitaciones);
+
+	}
+
+	@GetMapping("/propiedades/valorp/{valor}")
+	public Iterable<AgenciaPropiedad> getValorPropiedad(@PathVariable Double valor) {
+		return agenciaPropiedadRepository.findByValor(valor);
+
+	}
+
+	@GetMapping("/propiedades/area/{areaMetros}")
+	public Iterable<AgenciaPropiedad> getAreaMetros(@PathVariable Double areaMetros) {
+		return agenciaPropiedadRepository.findByareaMetros(areaMetros);
+
+	}
+
+	@GetMapping("/propiedades/usuario/{numeroIdentificacion}")
+	public List<AgenciaPropiedadDTO> getPropiedadesUser(@PathVariable int numeroIdentificacion) {
+		Iterable<AgenciaPropiedad> iPropieda = agenciaPropiedadRepository.findAll();
+		List<AgenciaPropiedad> listaAgenciaPropiedad = new ArrayList<AgenciaPropiedad>();
+		List<AgenciaPropiedadDTO> listaAgenciaPropiedadDTO = new ArrayList<AgenciaPropiedadDTO>();
+		iPropieda.iterator().forEachRemaining(listaAgenciaPropiedad::add);
+
+		for (int i = 0; i < listaAgenciaPropiedad.size(); i++) {
+			if (listaAgenciaPropiedad.get(i).getAgenciaUsuario().getNumeroIdentificacion() == numeroIdentificacion) {
+				try {
+					AgenciaPropiedadDTO agenciaPropiedadDTO = convertAgenciaPropiedad
+							.convertToDTO(listaAgenciaPropiedad.get(i));
+					listaAgenciaPropiedadDTO.add(agenciaPropiedadDTO);
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+			}
+
+		}
+
+		return listaAgenciaPropiedadDTO;
 	}
 
 }

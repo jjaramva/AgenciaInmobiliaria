@@ -1,17 +1,23 @@
 package co.com.udem.crudagencia.entities;
 
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 @Entity
 public class AgenciaUsuario {
 
@@ -27,7 +33,8 @@ public class AgenciaUsuario {
 	private String email;
 	private String password;
 
-	@OneToOne(mappedBy = "agenciaUsuario")
-	private AgenciaPropiedad agenciaPropiedad;
+	@JsonManagedReference
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "agenciaUsuario")
+	private Set<AgenciaPropiedad> agenciaPropiedad;
 
 }
